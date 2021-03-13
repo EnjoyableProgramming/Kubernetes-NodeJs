@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: testing-kube-deploy
+  labels:
+    name: testing-kube-deploy
+    app: testing-kube-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: testing-kube-pod
+      app: testing-kube-app
+  template:
+    metadata:
+      name: testing-kube-pod
+      labels:
+        name: testing-kube-pod
+        app: testing-kube-app
+    spec:
+      containers:
+        - name: testing-kube-container
+          image: "<add-your-repo-uri>"
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: "1"
+            requests:
+              memory: 128Mi
+              cpu: "0.2"
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
